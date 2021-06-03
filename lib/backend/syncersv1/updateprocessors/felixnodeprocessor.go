@@ -260,6 +260,8 @@ func (c *FelixNodeUpdateProcessor) Process(kvp *model.KVPair) ([]*model.KVPair, 
 		}
 	}
 
+	log.WithFields(log.Fields{"nodeKVP": *kvp, "nodeKVPs": kvps}).Debug("processing kv pair for felix")
+
 	return kvps, err
 }
 

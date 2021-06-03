@@ -167,6 +167,8 @@ func (c *nodeClient) List(ctx context.Context, list model.ListInterface, revisio
 		kvps = append(kvps, kvp)
 	}
 
+	log.WithFields(log.Fields{"nodesK8s": nodes, "nodesKVPs": kvps}).Debug("listing nodes from k8s")
+
 	return &model.KVPairList{
 		KVPairs:  kvps,
 		Revision: revision,
