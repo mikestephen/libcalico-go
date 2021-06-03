@@ -19,6 +19,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/davecgh/go-spew/spew"
 	"reflect"
 
 	log "github.com/sirupsen/logrus"
@@ -167,7 +168,10 @@ func (c *nodeClient) List(ctx context.Context, list model.ListInterface, revisio
 		kvps = append(kvps, kvp)
 	}
 
-	log.WithFields(log.Fields{"nodesK8s": nodes, "nodesKVPs": kvps}).Debug("listing nodes from k8s")
+	log.WithFields(log.Fields{
+		"nodesK8s":  spew.Sprint(nodes),
+		"nodesKVPs": spew.Sprint(kvps),
+	}).Debug("listing nodes from k8s")
 
 	return &model.KVPairList{
 		KVPairs:  kvps,

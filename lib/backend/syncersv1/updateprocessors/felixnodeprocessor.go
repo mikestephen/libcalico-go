@@ -17,7 +17,7 @@ package updateprocessors
 import (
 	"errors"
 	"fmt"
-
+	"github.com/davecgh/go-spew/spew"
 	log "github.com/sirupsen/logrus"
 
 	apiv3 "github.com/projectcalico/libcalico-go/lib/apis/v3"
@@ -260,7 +260,10 @@ func (c *FelixNodeUpdateProcessor) Process(kvp *model.KVPair) ([]*model.KVPair, 
 		}
 	}
 
-	log.WithFields(log.Fields{"nodeKVP": *kvp, "nodeKVPs": kvps}).Debug("processing kv pair for felix")
+	log.WithFields(log.Fields{
+		"nodeKVP":  spew.Sprint(kvp),
+		"nodeKVPs": spew.Sprint(kvps),
+	}).Debug("processing kv pair for felix")
 
 	return kvps, err
 }
