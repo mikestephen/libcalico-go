@@ -261,8 +261,8 @@ func (c *FelixNodeUpdateProcessor) Process(kvp *model.KVPair) ([]*model.KVPair, 
 	}
 
 	log.WithFields(log.Fields{
-		"nodeKVP":  spew.Sprint(kvp),
-		"nodeKVPs": spew.Sprint(kvps),
+		"nodeKVP":  spew.Sprintf("%v", kvp),
+		"nodeKVPs": spew.Sprintf("%v", kvps),
 	}).Debug("processing kv pair for felix")
 
 	return kvps, err
