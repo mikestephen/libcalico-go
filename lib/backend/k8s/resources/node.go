@@ -169,8 +169,8 @@ func (c *nodeClient) List(ctx context.Context, list model.ListInterface, revisio
 	}
 
 	log.WithFields(log.Fields{
-		"nodesK8s":  spew.Sprintf("%v", nodes),
-		"nodesKVPs": spew.Sprintf("%v", kvps),
+		"nodesK8s":  spew.Sdump(nodes),
+		"nodesKVPs": spew.Sdump(kvps),
 	}).Debug("listing nodes from k8s")
 
 	return &model.KVPairList{
