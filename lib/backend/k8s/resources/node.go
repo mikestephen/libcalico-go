@@ -293,6 +293,8 @@ func K8sNodeToCalico(k8sNode *kapiv1.Node, usePodCIDR bool) (*model.KVPair, erro
 	// Fill the list of all addresses from the calico Node
 	fillAllAddresses(calicoNode, k8sNode)
 
+	log.WithFields(log.Fields{"k8sNode": *k8sNode, "calicoNode": *calicoNode}).Debug("MIKE: converted k8s node to calico node")
+
 	// Create the resource key from the node name.
 	return &model.KVPair{
 		Key: model.ResourceKey{
