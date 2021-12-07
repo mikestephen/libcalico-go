@@ -16,9 +16,12 @@ package updateprocessors_test
 
 import (
 	"net"
+	"time"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
+
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
 	apiv3 "github.com/projectcalico/api/pkg/apis/projectcalico/v3"
 	"github.com/projectcalico/api/pkg/lib/numorstring"
@@ -72,6 +75,7 @@ var _ = Describe("Test the WorkloadEndpoint update processor", func() {
 		netmac2, err := net.ParseMAC("01:23:45:67:89:ab")
 		Expect(err).NotTo(HaveOccurred())
 		mac2 := cnet.MAC{HardwareAddr: netmac2}
+		now := metav1.Now()
 
 		up := updateprocessors.NewWorkloadEndpointUpdateProcessor()
 
@@ -82,6 +86,7 @@ var _ = Describe("Test the WorkloadEndpoint update processor", func() {
 			"projectcalico.org/namespace":    ns1,
 			"projectcalico.org/orchestrator": oid1,
 		}
+		res.CreationTimestamp = now
 		res.Spec.Node = hn1
 		res.Spec.Orchestrator = oid1
 		res.Spec.Workload = wid1
@@ -109,7 +114,9 @@ var _ = Describe("Test the WorkloadEndpoint update processor", func() {
 					"projectcalico.org/namespace":    ns1,
 					"projectcalico.org/orchestrator": oid1,
 				},
-				IPv4Nets: []cnet.IPNet{expectedIPv4Net},
+				IPv4Nets:          []cnet.IPNet{expectedIPv4Net},
+				CreationTimestamp: now.Time,
+				DeletionTimestamp: time.Time{},
 			},
 			Revision: "abcde",
 		}))
@@ -122,6 +129,8 @@ var _ = Describe("Test the WorkloadEndpoint update processor", func() {
 			"projectcalico.org/namespace":    ns2,
 			"projectcalico.org/orchestrator": oid2,
 		}
+		res.CreationTimestamp = now
+		res.DeletionTimestamp = &now
 		res.Spec.Node = hn2
 		res.Spec.Orchestrator = oid2
 		res.Spec.Workload = wid2
@@ -183,6 +192,8 @@ var _ = Describe("Test the WorkloadEndpoint update processor", func() {
 							Port:     uint16(8080),
 						},
 					},
+					CreationTimestamp: now.Time,
+					DeletionTimestamp: now.Time,
 				},
 				Revision: "1234",
 			},

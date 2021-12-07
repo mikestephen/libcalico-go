@@ -18,6 +18,7 @@ import (
 	"errors"
 	"net"
 	"strings"
+	"time"
 
 	log "github.com/sirupsen/logrus"
 
@@ -155,20 +156,26 @@ func convertWorkloadEndpointV2ToV1Value(val interface{}) (interface{}, error) {
 		labels[apiv3.LabelServiceAccount] = v3res.Spec.ServiceAccountName
 	}
 
+	delTimestamp := time.Time{}
+	if v3res.DeletionTimestamp != nil {
+		delTimestamp = v3res.DeletionTimestamp.Time
+	}
 	v1value := &model.WorkloadEndpoint{
-		State:        "active",
-		Name:         v3res.Spec.InterfaceName,
-		Mac:          cmac,
-		ProfileIDs:   v3res.Spec.Profiles,
-		IPv4Nets:     ipv4Nets,
-		IPv6Nets:     ipv6Nets,
-		IPv4NAT:      ipv4NAT,
-		IPv6NAT:      ipv6NAT,
-		Labels:       labels,
-		IPv4Gateway:  ipv4Gateway,
-		IPv6Gateway:  ipv6Gateway,
-		Ports:        ports,
-		GenerateName: v3res.GenerateName,
+		State:             "active",
+		Name:              v3res.Spec.InterfaceName,
+		Mac:               cmac,
+		ProfileIDs:        v3res.Spec.Profiles,
+		IPv4Nets:          ipv4Nets,
+		IPv6Nets:          ipv6Nets,
+		IPv4NAT:           ipv4NAT,
+		IPv6NAT:           ipv6NAT,
+		Labels:            labels,
+		IPv4Gateway:       ipv4Gateway,
+		IPv6Gateway:       ipv6Gateway,
+		Ports:             ports,
+		GenerateName:      v3res.GenerateName,
+		CreationTimestamp: v3res.CreationTimestamp.Time,
+		DeletionTimestamp: delTimestamp,
 	}
 
 	return v1value, nil
